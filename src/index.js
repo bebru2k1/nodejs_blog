@@ -5,8 +5,17 @@ const path = require('path')
 const app = express();
 const port = 3000;
 
-app.use(morgan('combined'));
-app.use(express.static(path.join(__dirname,'public')))
+const router = require('./routes')
+// const router = express.Router();
+// app.use(morgan('combined'));
+app.use(express.static(path.join(__dirname,'public')));
+
+app.use(express.urlencoded({
+    extended: true,
+}));
+app.use(express.json());
+
+
 //Template Engime
 app.engine('hbs', handlebars({
     extname: '.hbs'
@@ -14,7 +23,9 @@ app.engine('hbs', handlebars({
 app.set('view engine','hbs');
 app.set('views',path.join(__dirname, 'resoursces/views') )
 
-app.get('/', (req,res) => res.render('home'));
-app.get('/news', (req,res) => res.render('news'))
+// route
+router(app);
+
+
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
